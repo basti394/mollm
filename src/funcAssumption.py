@@ -3,9 +3,9 @@ import torch
 import matplotlib.pyplot as plt
 
 
-def assume_func():
-    x = np.linspace(-6, 6, 1000)
-    y = np.sin(x) - 0.1 * x ** 2
+def assume_func(func):
+    x = np.linspace(-6, 6, 100)
+    y = func(x)
 
     model = torch.nn.Sequential(
         torch.nn.Linear(1, 4),
@@ -17,9 +17,10 @@ def assume_func():
 
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
-    for epoch in range(30000):
-        inputs = torch.from_numpy(x.reshape(1000, 1)).float()
-        targets = torch.from_numpy(y.reshape(1000, 1)).float()
+    learning_time = 30000
+    for epoch in range(learning_time):
+        inputs = torch.from_numpy(x.reshape(100, 1)).float()
+        targets = torch.from_numpy(y.reshape(100, 1)).float()
 
         outputs = model(inputs)
         loss = criterion(outputs, targets)
@@ -30,7 +31,7 @@ def assume_func():
         optimizer.step()
 
         if epoch % 100 == 0:
-            print(f'Epoch {epoch + 1}/500 | Loss: {loss.item():.4f}')
+            print(f'Epoch {epoch}/{learning_time} | Loss: {loss.item():.4f}')
 
     plt.figure()
     plt.scatter(x, y, label='data')

@@ -2,5 +2,8 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 import funcAssumption
+import letterRecognition
 
-funcAssumption.assume_func()
+letterRecognition
+
+#funcAssumption.assume_func(lambda x: np.sin(x) - 0.1 * x ** 2)
