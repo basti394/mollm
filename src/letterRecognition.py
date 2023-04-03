@@ -24,26 +24,35 @@ dataloader = DataLoader(
 )
 
 model = nn.Sequential(
-    nn.Linear(28, 16),
-    nn.Sigmoid(),
-    nn.Linear(16, 16),
-    nn.Sigmoid(),
-    nn.Linear(16, 61)
+    nn.Conv2d(3, 16, 3),
+    nn.ReLU(),
+    nn.Conv2d(16, 32, 3),
+    nn.ReLU(),
+    nn.Conv2d(32, 64, 3),
+    nn.ReLU(),
+    nn.Flatten(),
+    nn.Linear(30976, 128),
+    nn.ReLU(),
+    nn.Linear(128, 61)
 )
 
 
 def train():
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.3, momentum=0.9)
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
     time0 = time()
 
     for epoch in range(3000):
         running_loss = 0
         for images, labels in dataloader:
+            #print("labels: -----------------------------------------------------")
+            #print(labels)
             optimizer.zero_grad()
 
             output = model(images)
-            loss = criterion(output, labels.view(1, -1))
+            #print("output: ------------------------------------------------------")
+            #print(output)
+            loss = criterion(output, labels.view(-1, 1, 1, 1).float())
 
             loss.backward()
             optimizer.step()
